@@ -39,7 +39,6 @@ pygame.display.set_caption('Змейка')
 clock = pygame.time.Clock()
 
 
-# Тут опишите все классы игры.
 class GameObject:
     """
     Базовый класс для всех объектов игры, который содржит:
@@ -94,6 +93,7 @@ class Snake(GameObject):
                                   (head_y + dir_y * GRID_SIZE) % SCREEN_HEIGHT)
         self.positions.insert(0, self.new_head_position)  # Добавдяем голову
         self.last = self.positions[-1]
+        
         # Удаляем хвост, если длина змейки превышает self.length
         if len(self.positions) > self.length:
             del self.positions[-1]
@@ -110,7 +110,7 @@ class Snake(GameObject):
     def draw(self):
         """
         Отрисовывает змейку на экране.
-        Дорисовывает новую голову и стирает ушедший сегмент хвоста.
+        Рисует новую голову и стирает ушедший сегмент хвоста.
         """
         for position in self.positions[:-1]:
             rect = (pygame.Rect(position, (GRID_SIZE, GRID_SIZE)))
@@ -191,9 +191,9 @@ def main():
     Инициализирует модули Pygame, создает игровые объекты,
     запускает главный цикл игры.
     """
-    # Инициализация PyGame:
+    # Инициализация PyGame
     pygame.init()
-    # Экземпляры классов:
+    # Экземпляры классов
     snake = Snake()
     apple = Apple()
     # Очищаем экран черным цветом один раз при старте игры
@@ -205,8 +205,7 @@ def main():
     while running:
         clock.tick(SPEED)  # Ограничение скорости игры
 
-        # Обработка нажатия клавиш
-        handle_keys(snake)
+        handle_keys(snake)  # Обработка нажатия клавиш
 
         # Обновление состояния змейки
         snake.update_direction()
