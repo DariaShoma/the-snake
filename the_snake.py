@@ -93,7 +93,7 @@ class Snake(GameObject):
                                   (head_y + dir_y * GRID_SIZE) % SCREEN_HEIGHT)
         self.positions.insert(0, self.new_head_position)  # Добавдяем голову
         self.last = self.positions[-1]
-        
+
         # Удаляем хвост, если длина змейки превышает self.length
         if len(self.positions) > self.length:
             del self.positions[-1]
