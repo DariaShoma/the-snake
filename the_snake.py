@@ -183,7 +183,7 @@ def handle_keys(game_object):
 
 def update_score(length):
     """Отображает в заголовке окна игры актуальный счёт."""
-    pg.display.set_caption(f"Змейка | Счёт: {length} | Выход: ESC")
+    pg.display.set_caption(f'Змейка | Счёт: {length} | Выход: ESC')
 
 
 def main():
