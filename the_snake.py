@@ -48,11 +48,17 @@ class GameObject:
         self.body_color = body_color
         self.position = SCREEN_CENTR
 
-    def draw(self, position=None, color=None):
+    def draw(self):
+        """
+        Метод для отрисовки объекта на экране,
+        переопределяется в дочерних классах.
+        """
+
+    def draw_block(self, position=None, color=None):
         """Метод для отрисовки одной клетки на экране."""
-        position = position if position is not None else self.position
-        color = color if color is not None else self.body_color
-        rect = (pg.Rect(position, (GRID_SIZE, GRID_SIZE)))
+        position = position or self.position
+        color = color or self.body_color
+        rect = pg.Rect(position, (GRID_SIZE, GRID_SIZE))
         pg.draw.rect(screen, color, rect)
         pg.draw.rect(screen, BORDER_COLOR, rect, 1)
 
@@ -79,10 +85,7 @@ class Snake(GameObject):
         """
         self.length = 1
         self.positions = [SCREEN_CENTR]
-        if start_direction:
-            self.direction = start_direction
-        else:
-            self.direction = choice([UP, DOWN, LEFT, RIGHT])
+        self.direction = start_direction or choice([UP, DOWN, LEFT, RIGHT])
         self.next_direction = None
         self.last = None
 
@@ -122,7 +125,7 @@ class Snake(GameObject):
         Рисует новую голову и стирает ушедший сегмент хвоста.
         """
         for position in self.positions:
-            super().draw(position=position, color=SNAKE_COLOR)
+            self.draw_block(position=position, color=SNAKE_COLOR)
 
         # Затирание последнего сегмента
         if self.last:
@@ -134,7 +137,6 @@ class Apple(GameObject):
     """
     Класс яблока, отвечает за рандомное размещение и отрисовку. Внутри:
     body_color (tuple): цвет яблока, унаследованный от GameObject.
-    Метод рисования яблока наследуется от родительского класса GameObject.
     """
 
     def __init__(self, snake_positions=None):
@@ -146,8 +148,7 @@ class Apple(GameObject):
         Создаёт случайные координаты (по сетке) яблока на игровом поле,
         исключая тело змейки.
         """
-        if snake_positions is None:
-            snake_positions = []
+        snake_positions = snake_positions or []
         while True:
             x = randint(0, GRID_WIDTH - 1) * GRID_SIZE
             y = randint(0, GRID_HEIGHT - 1) * GRID_SIZE
@@ -155,6 +156,10 @@ class Apple(GameObject):
             if new_position not in snake_positions:
                 self.position = new_position
                 break
+
+    def draw(self):
+        """Отрисовывает яблоко на экране."""
+        self.draw_block(position=self.position, color=APPLE_COLOR)
 
 
 def handle_keys(game_object):
@@ -183,7 +188,7 @@ def handle_keys(game_object):
 
 def update_score(length):
     """Отображает в заголовке окна игры актуальный счёт."""
-    pg.display.set_caption(f'Змейка | Счёт: {length} | Выход: ESC')
+    pg.display.set_caption(f'Змейка | Счёт: {length - 1} | Выход: ESC')
 
 
 def main():
